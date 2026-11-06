@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>救命ワードウルフ</title>
+<style>
+:root{color-scheme:light;--bg:#C6EBF3;--card:#fff;--tx:#14586A;--mu:#3F7886;--pr:#4FC3D9;--pt:#fff;--soft:#E1F5F9;--bd:#9FD3E0;--pk:#FFD3D8;--pkt:#9B2C3A;--ok:#1d8a4a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+
+
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif}
+#app{max-width:480px;margin:0 auto;padding:18px 16px 40px}
+h1{font-size:24px;margin:8px 0 2px}h2{font-size:18px;margin:0 0 10px}
+.mu{color:var(--mu);font-size:13px;line-height:1.6}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin:12px 0}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.btn{display:block;width:100%;border:0;border-radius:10px;padding:15px;font-size:17px;font-weight:700;background:var(--pr);color:var(--pt);margin-top:12px;cursor:pointer}
+a.btn{text-align:center;text-decoration:none;box-sizing:border-box}.btn.sec{background:#fff;color:var(--tx);border:1px solid var(--bd)}
+.seg{display:flex;gap:6px;margin-top:8px}
+.seg button{flex:1;padding:10px 4px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:14px;cursor:pointer}
+.seg button.on{background:var(--pr);color:var(--pt);border-color:var(--pr)}
+.step{display:flex;align-items:center;gap:14px}
+.step button{width:42px;height:42px;border-radius:50%;border:1px solid var(--bd);background:var(--soft);color:var(--tx);font-size:22px;cursor:pointer}
+.step b{font-size:22px;min-width:48px;text-align:center}
+.big{font-size:34px;font-weight:800;text-align:center;padding:34px 8px;word-break:break-all}
+.timer{font-size:56px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;margin:12px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.grid .btn{margin:0;font-size:15px}
+input[type=text]{width:100%;box-sizing:border-box;padding:9px;margin-top:6px;border-radius:8px;border:1px solid var(--bd);background:#fff;color:var(--tx);font-size:15px}
+.tag{display:inline-block;background:var(--pk);color:var(--pkt);border-radius:8px;padding:2px 8px;font-size:12px}
+.chip{padding:11px 12px;border-radius:12px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:14px;text-align:left;cursor:pointer;width:100%;margin-top:8px}.chip.on{background:var(--pr);color:var(--pt);border-color:var(--pr)}.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}.ex{font-size:14px;line-height:1.7;margin:6px 0 12px}.win{font-size:22px;font-weight:800;text-align:center;margin:6px 0}
+summary{cursor:pointer;font-size:14px}
+</style></head><body><div id="app"></div>
+<script src="words.js"></script>
+<script>
+// ▼ 設定：フォームのURLを貼る（空欄の間はボタンを表示しない）
+const CFG={formSubmit:"",formReport:""};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let S={n:3,w:1,rev:true,time:5,names:[]},G=null,scr='setup',timer=null;
+const nm=i=>(S.names[i]||'').trim()||`プレイヤー${i+1}`;
+const lsObj=k=>{try{return JSON.parse(localStorage.getItem(k)||'{}')||{}}catch(e){return{}}};
+const lsPut=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const pkey=w=>[w.a,w.b].sort().join('|');
+const usedSet=()=>new Set(Object.keys(lsObj('ew_used')));
+const allWords=()=>SEED.map(([a,b,ea,eb])=>({a,b,ea,eb}));
+function getPair(){
+  const all=allWords();let f=all.filter(w=>!usedSet().has(pkey(w)));
+  if(!f.length){lsPut('ew_used',{});f=all}
+  const p=f[Math.floor(Math.random()*f.length)],o=lsObj('ew_used');o[pkey(p)]=1;lsPut('ew_used',o);return p;
+}
+function go(s){scr=s;render()}
+function set(k,v){S[k]=v;render()}
+function seg(k,opts,cur){return`<div class="seg">${opts.map(([l,v])=>`<button class="${cur===v?'on':''}" onclick="set('${k}',${typeof v==='string'?`'${v}'`:v})">${l}</button>`).join('')}</div>`}
+function render(){
+  clearInterval(timer);const A=$('#app');
+  if(scr==='setup'){
+    const mw=maxW(),all=allWords(),used=usedSet();
+    A.innerHTML=`
+  <h1 style="display:flex;align-items:center;justify-content:center;gap:8px"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#4FC3D9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M5 17h-2v-11a1 1 0 0 1 1 -1h9v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5"/><path d="M6 10h4m-2 -2v4"/></svg>救命ワードウルフ</h1>
+  <div class="card"><div class="row"><b>人数</b><div class="step"><button onclick="chN(-1)">−</button><b>${S.n}人</b><button onclick="chN(1)">＋</button></div></div>
+  <p class="mu" style="margin:8px 0 0">3〜10人 / ウルフは1人</p></div>
+  <div class="card"><b>逆転ルール</b>${seg('rev',[['あり',true],['なし',false]],S.rev)}<p class="mu" style="margin:8px 0 0">${S.rev?'ウルフを見つけても、ウルフが市民のワードを当てれば逆転勝ち。':'ウルフを見つけたら市民の勝ち。'}</p></div>
+  <div class="card"><b>議論時間</b>${seg('time',[['5分',5],['10分',10],['15分',15]],S.time)}</div>
+  <div class="card"><b>名前（任意）</b><div class="g2">${Array.from({length:S.n},(_,i)=>`<input type="text" maxlength="8" placeholder="プレイヤー${i+1}" value="${esc(S.names[i]||'')}" oninput="S.names[${i}]=this.value">`).join('')}</div></div>
+  <button class="btn" onclick="start()">ゲーム開始</button>
+  ${CFG.formSubmit?`<a class="btn sec" href="${esc(CFG.formSubmit)}" target="_blank" rel="noopener">お題を提供する</a>`:''}`;
+  }
+  if(scr==='loading')A.innerHTML=`<p class="big mu">お題を準備中…</p>`;
+  if(scr==='reveal'){
+    const i=G.i;
+    A.innerHTML=G.show?`<div class="card"><p class="mu">${esc(nm(i))}さんのワード</p><div class="big">${esc(G.words[i])}</div><p class="mu">他の人に見せないでください。</p></div>
+    <button class="btn" onclick="nextP()">${i<S.n-1?'確認した → 次の人へ':'確認した → 議論スタート'}</button>`
+    :`<div class="card"><p class="mu">${i+1} / ${S.n}</p><div class="big">${esc(nm(i))}さんに<br>スマホを渡してください</div></div>${G.aiNote&&i===0?`<p class="mu">${esc(G.aiNote)}</p>`:''}<button class="btn" onclick="G.show=true;render()">ワードを見る</button>`;
+  }
+  if(scr==='talk'){
+    A.innerHTML=`<h2>議論タイム</h2><p class="mu">ワードを直接言わずに、特徴を話してウルフを探しましょう。<br>最初に話す人：<b>${esc(nm(G.first))}</b></p><div class="timer" id="tm"></div><button class="btn" onclick="go('vote')">投票へ進む</button>`;
+    tick();timer=setInterval(()=>{G.left>0&&G.left--;tick()},1000);
+  }
+  if(scr==='vote')A.innerHTML=`<h2>投票</h2><p class="mu">全員で一斉に指をさし、得票の多い${S.w}人を選んでください。</p><div class="grid">${Array.from({length:S.n},(_,i)=>`<button class="btn ${G.vsel.has(i)?'':'sec'}" onclick="vtog(${i})">${esc(nm(i))}</button>`).join('')}</div><button class="btn" onclick="decide()" ${G.vsel.size===S.w?'':'disabled style="opacity:.5"'}>決定（${G.vsel.size}/${S.w}人）</button>`;
+  if(scr==='guess')A.innerHTML=`<h2>${esc(wnames())}さん、ウルフです！</h2><div class="card"><p>最後のチャンス。${esc(wnames())}さんは市民のワードを、口頭で答えてください。</p><p class="mu">答えを他の人が判定します。</p></div><button class="btn" onclick="end('wolf')">正解（逆転勝ち）</button><button class="btn sec" onclick="end('cit')">不正解</button>`;
+  if(scr==='result'){
+    const p=G.p,ec=G.cit===p.a?p.ea:p.eb,ew=G.cit===p.a?p.eb:p.ea;
+    A.innerHTML=`<div class="win">${G.win==='cit'?'🎉 市民チームの勝ち！':'🐺 ウルフの勝ち！'}</div><p class="mu" style="text-align:center">${esc(G.why)}</p>
+    <div class="card">${G.words.map((w,i)=>`<div class="row" style="${i?'margin-top:10px':''}"><span><span style="display:inline-block;width:1.8em">${G.wolves.has(i)?'🐺':''}</span>${esc(nm(i))}</span><b>${esc(w)}</b></div>`).join('')}</div>
+    <div class="card"><b>📘 ワード解説</b><p class="ex"><b>${esc(G.cit)}</b> <span class="tag">市民</span><br>${esc(ec||'解説はありません。')}</p><p class="ex"><b>${esc(G.wlf)}</b> <span class="tag">ウルフ</span><br>${esc(ew||'解説はありません。')}</p><p class="mu">学習の補助です。正確な内容は教科書・ガイドライン・地域のプロトコルで確認してください。</p></div>
+    ${CFG.formReport?`<a class="btn sec" href="${esc(CFG.formReport)}" target="_blank" rel="noopener">解説の誤りを報告</a>`:''}
+    <button class="btn" onclick="start()">同じ設定でもう一度</button><button class="btn sec" onclick="go('setup')">設定に戻る</button>`;
+  }
+}
+function tick(){const e=$('#tm');if(!e)return;const m=Math.floor(G.left/60),s=G.left%60;e.textContent=G.left?`${m}:${String(s).padStart(2,'0')}`:'時間切れ！'}
+const maxW=()=>Math.max(1,Math.floor((S.n-1)/2));
+const wnames=()=>[...G.wolves].map(nm).join('、');
+function chN(d){S.n=Math.min(10,Math.max(3,S.n+d));S.w=Math.min(S.w,maxW());render()}
+function chW(d){S.w=Math.min(maxW(),Math.max(1,S.w+d));render()}
+async function start(){
+  G={aiNote:''};go('loading');
+  const p=await getPair(),swap=Math.random()<.5,cit=swap?p.b:p.a,wlf=swap?p.a:p.b;
+  const wolves=new Set([...Array(S.n).keys()].sort(()=>Math.random()-.5).slice(0,S.w));
+  G={...G,p,wolves,cit,wlf,i:0,show:false,sel:new Set(),vsel:new Set(),words:Array.from({length:S.n},(_,i)=>wolves.has(i)?wlf:cit),left:S.time*60,first:Math.floor(Math.random()*S.n)};
+  go('reveal');
+}
+function nextP(){G.show=false;G.i++;G.i<S.n?render():go('talk')}
+function vtog(i){const v=G.vsel;if(v.has(i))v.delete(i);else{if(v.size>=S.w){if(S.w===1)v.clear();else return}v.add(i)}render()}
+function decide(){
+  if([...G.vsel].every(i=>G.wolves.has(i))){
+    if(S.rev)go('guess');else{G.win='cit';G.why='ウルフを見事に指名しました';go('result')}
+  }else{G.win='wolf';G.why=S.w>1?'ウルフを全員は見つけられませんでした':'ウルフを見つけられませんでした';go('result')}
+}
+function end(w){G.win=w;G.why=w==='wolf'?'ウルフが市民のワードを当てて逆転！':'ウルフを指名し、逆転も許しませんでした';go('result')}
+render();
+</script></body></html>
