@@ -1,7 +1,36 @@
 <!doctype html>
 <html lang="ja"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>救命ワードウルフ</title>
+<title>救命ワードウルフ｜救急救命士の用語で遊ぶ無料の言葉当てゲーム</title>
+<meta name="description" content="救急救命士・救急医療の用語で遊ぶ無料のワードウルフ。3〜10人で遊べて、逆転ルールも選べます。お題は100組以上、遊んだあとに解説も読めるので、国家試験の学習のきっかけにも。">
+<meta name="keywords" content="ワードウルフ,救急救命士,救急救命士国家試験,救急,応急手当,パーティーゲーム,無料,勉強会,レクリエーション">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#C6EBF3">
+<meta name="color-scheme" content="light">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="救命ワードウルフ">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="canonical" href="https://example.com/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="救命ワードウルフ">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="救命ワードウルフ｜救急救命士の用語で遊ぶ無料の言葉当てゲーム">
+<meta property="og:description" content="救急救命士・救急医療の用語で遊ぶ無料のワードウルフ。3〜10人で遊べて、逆転ルールも選べます。お題は100組以上、遊んだあとに解説も読めるので、国家試験の学習のきっかけにも。">
+<meta property="og:url" content="https://example.com/">
+<meta property="og:image" content="https://example.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="救命ワードウルフのタイトル画像">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="救命ワードウルフ｜救急救命士の用語で遊ぶ無料の言葉当てゲーム">
+<meta name="twitter:description" content="救急救命士・救急医療の用語で遊ぶ無料のワードウルフ。3〜10人で遊べて、逆転ルールも選べます。お題は100組以上、遊んだあとに解説も読めるので、国家試験の学習のきっかけにも。">
+<meta name="twitter:image" content="https://example.com/og-image.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"救命ワードウルフ","url":"https://example.com/","description":"救急救命士・救急医療の用語で遊ぶ無料のワードウルフ。3〜10人で遊べて、逆転ルールも選べます。お題は100組以上、遊んだあとに解説も読めるので、国家試験の学習のきっかけにも。","applicationCategory":"GameApplication","operatingSystem":"Any","inLanguage":"ja","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}}</script>
 <style>
 :root{color-scheme:light;--bg:#C6EBF3;--card:#fff;--tx:#14586A;--mu:#3F7886;--pr:#4FC3D9;--pt:#fff;--soft:#E1F5F9;--bd:#9FD3E0;--pk:#FFD3D8;--pkt:#9B2C3A;--ok:#1d8a4a;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -14,7 +43,7 @@ h1{font-size:24px;margin:8px 0 2px}h2{font-size:18px;margin:0 0 10px}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin:12px 0}
 .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .btn{display:block;width:100%;border:0;border-radius:10px;padding:15px;font-size:17px;font-weight:700;background:var(--pr);color:var(--pt);margin-top:12px;cursor:pointer}
-a.btn{text-align:center;text-decoration:none;box-sizing:border-box}.btn.sec{background:#fff;color:var(--tx);border:1px solid var(--bd)}
+a.btn{text-align:center;text-decoration:none;box-sizing:border-box}.em{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}.btn.sec{background:#fff;color:var(--tx);border:1px solid var(--bd)}
 .seg{display:flex;gap:6px;margin-top:8px}
 .seg button{flex:1;padding:10px 4px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:14px;cursor:pointer}
 .seg button.on{background:var(--pr);color:var(--pt);border-color:var(--pr)}
@@ -29,12 +58,13 @@ input[type=text]{width:100%;box-sizing:border-box;padding:9px;margin-top:6px;bor
 .tag{display:inline-block;background:var(--pk);color:var(--pkt);border-radius:8px;padding:2px 8px;font-size:12px}
 .chip{padding:11px 12px;border-radius:12px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:14px;text-align:left;cursor:pointer;width:100%;margin-top:8px}.chip.on{background:var(--pr);color:var(--pt);border-color:var(--pr)}.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}.ex{font-size:14px;line-height:1.7;margin:6px 0 12px}.win{font-size:22px;font-weight:800;text-align:center;margin:6px 0}
 summary{cursor:pointer;font-size:14px}
-</style></head><body><div id="app"></div>
+</style></head><body><div id="app"><h1>救命ワードウルフ</h1><p class="mu">救急救命士の用語で遊ぶ無料のワードウルフです。3〜10人で遊べます。<noscript>ご利用にはJavaScriptを有効にしてください。</noscript></p></div>
 <script src="words.js"></script>
 <script>
 // ▼ 設定：フォームのURLを貼る（空欄の間はボタンを表示しない）
 const CFG={formSubmit:"",formReport:""};
 const $=s=>document.querySelector(s);
+const WOLF='<span class="em">🐺\uFE0F</span>';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let S={n:3,w:1,rev:true,time:5,names:[]},G=null,scr='setup',timer=null;
 const nm=i=>(S.names[i]||'').trim()||`プレイヤー${i+1}`;
@@ -80,8 +110,8 @@ function render(){
   if(scr==='guess')A.innerHTML=`<h2>${esc(wnames())}さん、ウルフです！</h2><div class="card"><p>最後のチャンス。${esc(wnames())}さんは市民のワードを、口頭で答えてください。</p><p class="mu">答えを他の人が判定します。</p></div><button class="btn" onclick="end('wolf')">正解（逆転勝ち）</button><button class="btn sec" onclick="end('cit')">不正解</button>`;
   if(scr==='result'){
     const p=G.p,ec=G.cit===p.a?p.ea:p.eb,ew=G.cit===p.a?p.eb:p.ea;
-    A.innerHTML=`<div class="win">${G.win==='cit'?'🎉 市民チームの勝ち！':'🐺 ウルフの勝ち！'}</div><p class="mu" style="text-align:center">${esc(G.why)}</p>
-    <div class="card">${G.words.map((w,i)=>`<div class="row" style="${i?'margin-top:10px':''}"><span><span style="display:inline-block;width:1.8em">${G.wolves.has(i)?'🐺':''}</span>${esc(nm(i))}</span><b>${esc(w)}</b></div>`).join('')}</div>
+    A.innerHTML=`<div class="win">${G.win==='cit'?'🎉 市民チームの勝ち！':WOLF+' ウルフの勝ち！'}</div><p class="mu" style="text-align:center">${esc(G.why)}</p>
+    <div class="card">${G.words.map((w,i)=>`<div class="row" style="${i?'margin-top:10px':''}"><span><span style="display:inline-block;width:1.8em">${G.wolves.has(i)?WOLF:''}</span>${esc(nm(i))}</span><b>${esc(w)}</b></div>`).join('')}</div>
     <div class="card"><b>📘 ワード解説</b><p class="ex"><b>${esc(G.cit)}</b> <span class="tag">市民</span><br>${esc(ec||'解説はありません。')}</p><p class="ex"><b>${esc(G.wlf)}</b> <span class="tag">ウルフ</span><br>${esc(ew||'解説はありません。')}</p><p class="mu">学習の補助です。正確な内容は教科書・ガイドライン・地域のプロトコルで確認してください。</p></div>
     ${CFG.formReport?`<a class="btn sec" href="${esc(CFG.formReport)}" target="_blank" rel="noopener">解説の誤りを報告</a>`:''}
     <button class="btn" onclick="start()">同じ設定でもう一度</button><button class="btn sec" onclick="go('setup')">設定に戻る</button>`;
